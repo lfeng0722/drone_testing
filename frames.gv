@@ -1,0 +1,35 @@
+digraph G {
+"Copter" -> "landing_target/base_link"[label="Broadcaster: /tf_landing_target\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1667397024.664 sec old)\nBuffer length: 0.000 sec\n"];
+"world_ned" -> "Copter"[label="Broadcaster: /airsim_node\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1667397024.664 sec old)\nBuffer length: 0.000 sec\n"];
+"Copter/odom_local_ned" -> "downward_custom_body/static"[label="Broadcaster: /airsim_node\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1667397024.664 sec old)\nBuffer length: 0.000 sec\n"];
+"Copter" -> "Copter/odom_local_ned"[label="Broadcaster: /airsim_node\nAverage rate: 100.259 Hz\nMost recent transform: 1667436609.232 ( -39584.568 sec old)\nBuffer length: 4.977 sec\n"];
+"Copter/odom_local_ned" -> "downward_custom_optical/static"[label="Broadcaster: /airsim_node\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1667397024.664 sec old)\nBuffer length: 0.000 sec\n"];
+"Copter/odom_local_ned" -> "Copter/Lidar1"[label="Broadcaster: /airsim_node\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1667397024.664 sec old)\nBuffer length: 0.000 sec\n"];
+"map" -> "map_ned"[label="Broadcaster: /naga/mavros\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1667397024.664 sec old)\nBuffer length: 0.000 sec\n"];
+"odom" -> "odom_ned"[label="Broadcaster: /naga/mavros\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1667397024.664 sec old)\nBuffer length: 0.000 sec\n"];
+"base_link" -> "base_link_frd"[label="Broadcaster: /naga/mavros\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1667397024.664 sec old)\nBuffer length: 0.000 sec\n"];
+"Copter" -> "downward_custom_body"[label="Broadcaster: /airsim_node\nAverage rate: 20.251 Hz\nMost recent transform: 1667436609.214 ( -39584.550 sec old)\nBuffer length: 4.938 sec\n"];
+"Copter" -> "downward_custom_optical"[label="Broadcaster: /airsim_node\nAverage rate: 20.251 Hz\nMost recent transform: 1667436609.214 ( -39584.550 sec old)\nBuffer length: 4.938 sec\n"];
+"world_ned" -> "world_enu"[label="Broadcaster: /ned_to_enu_pub\nAverage rate: 10.195 Hz\nMost recent transform: 1667397024.665 ( -0.001 sec old)\nBuffer length: 4.806 sec\n"];
+"naga/map" -> "naga/base_link"[label="Broadcaster: /naga/mavros\nAverage rate: 4.223 Hz\nMost recent transform: 1667397024.407 ( 0.257 sec old)\nBuffer length: 4.499 sec\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1667397024.664"[ shape=plaintext ] ;
+ }->"world_ned";
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1667397024.664"[ shape=plaintext ] ;
+ }->"map";
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1667397024.664"[ shape=plaintext ] ;
+ }->"odom";
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1667397024.664"[ shape=plaintext ] ;
+ }->"base_link";
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1667397024.664"[ shape=plaintext ] ;
+ }->"naga/map";
+}
