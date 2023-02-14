@@ -78,7 +78,7 @@ def fitness_func_global(solution, solution_idx):
                     print('true negtive detected in this image')
                     # print('Coordinate of True:',obj_position_g)
                     # cv2.imwrite(f'True_negative/tn_global_{tn_num}.jpg', image)
-                    fitness_value -= 0.1/item[-2].item()
+                    fitness_value -= item[-2].item()
                     run_score += 1
 
 
@@ -113,7 +113,7 @@ def fitness_func_global(solution, solution_idx):
 
 if __name__ == "__main__":
     final_result = []
-    for i in range(4):
+    for i in range(10):
         print(f'this is {i} time')
         tn_num = 0
         fp_num = 0

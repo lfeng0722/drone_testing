@@ -12,17 +12,7 @@ matplotlib.use('TkAgg')
 
 
 
-def cluster_data_KDTree(a, thr=0.1):
-    t = KDTree(a)
-    mask = np.ones(a.shape[:1], bool)
-    idx = 0
-    nxt = 1
-    while nxt:
-        mask[t.query_ball_point(a[idx], thr)] = False
-        nxt = mask[idx:].argmax()
-        mask[idx] = True
-        idx += nxt
-    return a[mask]
+#
 
 mode = 'yolo'
 model = load_model()

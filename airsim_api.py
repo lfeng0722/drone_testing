@@ -293,7 +293,8 @@ def set_env_params(params):
     fly_to(0, 50, -height)
 
 
-    
+def landing():
+    client.landAsync(timeout_sec = 100, vehicle_name = 'Copter')
 
 def set_current_weather(params):
     # Rain = 0
@@ -304,20 +305,20 @@ def set_current_weather(params):
     # RoadLeaf = 5
     # Dust = 6
     # Fog = 7
-    # client.simSetWeatherParameter(airsim.WeatherParameter.Rain, min(1, params[0]))
+    client.simSetWeatherParameter(airsim.WeatherParameter.Rain, min(1, params[0]))
     client.simSetWeatherParameter(airsim.WeatherParameter.Roadwetness, min(1, params[1]))
-    # client.simSetWeatherParameter(airsim.WeatherParameter.Snow, min(1, params[2]))
+    client.simSetWeatherParameter(airsim.WeatherParameter.Snow, min(1, params[2]))
     client.simSetWeatherParameter(airsim.WeatherParameter.RoadSnow, min(1, params[3]))
-    # client.simSetWeatherParameter(airsim.WeatherParameter.MapleLeaf, min(1, params[4]))
+    client.simSetWeatherParameter(airsim.WeatherParameter.MapleLeaf, min(1, params[4]))
     client.simSetWeatherParameter(airsim.WeatherParameter.RoadLeaf, min(1, params[5]))
     client.simSetWeatherParameter(airsim.WeatherParameter.Dust, min(1, params[6]))
     client.simSetWeatherParameter(airsim.WeatherParameter.Fog, min(1, params[7]))
 
-    # wind = airsim.Vector3r(min(5, params[8]*5), min(5, params[9]*5), 0)
-    # client.simSetWind(wind)
+    wind = airsim.Vector3r(min(5, params[8]*5), min(5, params[8]*5), 0)
+    client.simSetWind(wind)
 
     # change light  
-    day_time = 12 + int(params[10] * 12) # set the time range [12, 24]
+    day_time = 12 + int(params[9] * 12) # set the time range [12, 24]
     if day_time > 24:
         day_time = 24
     
@@ -351,7 +352,42 @@ def get_current_scene(epoch=0, image_type=0):
     
     return img_rgb
 
+def setnpccarpos(object_name):
+    car_pose = client.simGetObjectPose(object_name)
+    # print(car_pose)
 
+    # car_pose.orientation.w_val = 0.542
+    # car_pose.orientation.x_val = 0.542
+    # car_pose.orientation.y_val = 0.455
+    # car_pose.orientation.z_val = -0.455
+
+
+    car_pose.position.x_val =0
+    car_pose.position.y_val =50
+    car_pose.position.z_val =0
+
+    a = client.simAddVehicle(vehicle_name='newcar', vehicle_type= "simpleflight", pose= car_pose)
+
+    return a
+
+
+def carmove(object_name):
+    car_pose = client.simGetObjectPose(object_name)
+    # print(car_pose)
+
+    # car_pose.orientation.w_val = 0.542
+    # car_pose.orientation.x_val = 0.542
+    # car_pose.orientation.y_val = 0.455
+    # car_pose.orientation.z_val = -0.455
+
+
+    car_pose.position.x_val =0
+    car_pose.position.y_val =0
+    car_pose.position.z_val =0
+
+    a = client.simSetObjectPose(object_name, car_pose, teleport = False)
+
+    return a
 
 if __name__ == "__main__":
     respawn()
