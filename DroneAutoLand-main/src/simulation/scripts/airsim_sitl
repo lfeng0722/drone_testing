@@ -1,0 +1,50 @@
+#!/usr/bin/env python3
+
+from pathlib import Path
+import subprocess
+import os, io
+import signal
+
+import rospy
+
+# Simple ROS wrapper to run ArduCopter SITL
+if __name__ == '__main__':
+    # Make sure we're in the ROS_HOME directory to make sure stray files all end up in one place
+    home_folder = Path(os.environ.get("HOME"))
+    ros_folder_str = os.environ.get("ROS_HOME")
+    if ros_folder_str:
+        # If variable is set
+        os.chdir(Path(ros_folder_str))
+    else:
+        # Default is "~/.ros"
+        os.chdir(home_folder / ".ros")
+
+
+    # Start ROS
+    rospy.init_node('airsim_sitl', anonymous=True)
+
+    # Main directory
+    airsim_folder = Path(rospy.get_param('~environment_directory', str(home_folder / "airsim_env")))
+    airsim_environment = str(rospy.get_param('~environment', 'LandscapeMountains'))
+    airsim_settings = str(rospy.get_param('~settings', '{}/AirSim/settings.json'.format(home_folder)))
+    tag = str(rospy.get_param('~PlayerStartTag', 'court'))
+
+    # Executable
+    run_sitl = airsim_folder / (airsim_environment + '.sh')
+    extra_args = ['-WINDOWED', '-ResX=800', '-ResY=600', '-settings={}'.format(airsim_settings), '-PlayerStartTag={}'.format(tag)]
+    
+    if not os.path.isfile(run_sitl):
+        rospy.logerr("File not found! Check: " + str(run_sitl))
+        exit(1)
+    
+    # Open the process with all it's args, dump output and errors to the one stream
+    with subprocess.Popen([str(run_sitl)] + extra_args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) as m:
+        rospy.loginfo("Started AirSim")
+        rospy.loginfo(extra_args)
+        try:
+            m.wait()
+            # # Loop through line by line of any output
+            # for line in io.TextIOWrapper(m.stdout, encoding="utf-8"):
+            #     rospy.loginfo('[AirSim] ' + line.strip()) # Strip to get rid of trailing end of lines
+        except rospy.ROSInterruptException:
+            m.send_signal(signal.SIGTERM)

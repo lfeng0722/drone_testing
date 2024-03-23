@@ -1,0 +1,108 @@
+{
+    "os": "Linux-5.8.0-34-generic-x86_64-with-glibc2.31",
+    "python": "3.9.13",
+    "heartbeatAt": "2023-04-20T05:22:36.429719",
+    "startedAt": "2023-04-20T05:22:35.499385",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "--data",
+        "data/ArUco.yaml"
+    ],
+    "state": "running",
+    "program": "/home/yao/Documents/skyy/src/skyy_autoland/src/skyy_autoland/yolov5/train.py",
+    "codePath": "src/skyy_autoland/yolov5/train.py",
+    "git": {
+        "remote": "https://gitlab.com/skyy.network/skyy_autoland",
+        "commit": "732ac5980776ff6fae18c49bcc88edbb446b64c0"
+    },
+    "email": "dylan496517985@gmail.com",
+    "root": "/home/yao/Documents/skyy/src/skyy_autoland",
+    "host": "SCI-9888",
+    "username": "yao",
+    "executable": "/home/yao/anaconda3/bin/python",
+    "cpu_count": 6,
+    "cpu_count_logical": 12,
+    "cpu_freq": {
+        "current": 4.299499999999999,
+        "min": 800.0,
+        "max": 4600.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 4.299,
+            "min": 800.0,
+            "max": 4600.0
+        },
+        {
+            "current": 4.299,
+            "min": 800.0,
+            "max": 4600.0
+        },
+        {
+            "current": 4.299,
+            "min": 800.0,
+            "max": 4600.0
+        },
+        {
+            "current": 4.299,
+            "min": 800.0,
+            "max": 4600.0
+        },
+        {
+            "current": 4.299,
+            "min": 800.0,
+            "max": 4600.0
+        },
+        {
+            "current": 4.299,
+            "min": 800.0,
+            "max": 4600.0
+        },
+        {
+            "current": 4.3,
+            "min": 800.0,
+            "max": 4600.0
+        },
+        {
+            "current": 4.3,
+            "min": 800.0,
+            "max": 4600.0
+        },
+        {
+            "current": 4.3,
+            "min": 800.0,
+            "max": 4600.0
+        },
+        {
+            "current": 4.3,
+            "min": 800.0,
+            "max": 4600.0
+        },
+        {
+            "current": 4.3,
+            "min": 800.0,
+            "max": 4600.0
+        },
+        {
+            "current": 4.3,
+            "min": 800.0,
+            "max": 4600.0
+        }
+    ],
+    "disk": {
+        "total": 438.6182327270508,
+        "used": 413.59955978393555
+    },
+    "gpu": "NVIDIA GeForce RTX 2080 Ti",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce RTX 2080 Ti",
+            "memory_total": 11811160064
+        }
+    ],
+    "memory": {
+        "total": 31.20972442626953
+    }
+}

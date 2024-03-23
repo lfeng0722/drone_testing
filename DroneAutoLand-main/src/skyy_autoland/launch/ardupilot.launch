@@ -1,0 +1,66 @@
+<?xml version='1.0'?>
+<launch>
+
+	<!-- ======================== -->
+	<!--   SITL All-In-One Demo   -->
+	<!-- ======================== -->
+
+	<!-- UAV Name for Namespacing -->
+	<arg name="sysname" default="naga"/>
+    <rosparam param="use_sim_time">true</rosparam>
+
+	
+	<!-- Ardupilot params -->
+	<arg name="ardupilot_directory" default="$(env HOME)/Documents/ardupilot"/>
+    <arg name="ardupilot_clear_eeprom" default="true"/>
+    <arg name="ardupilot_param_path" default="$(find skyy_autoland)/config/naga_sitl_airsim.params"/>
+    <arg name="ardupilot_home_lat" default="-33.7708463"/>
+    <arg name="ardupilot_home_lon" default="151.1155670"/>
+    <arg name="ardupilot_home_alt" default="53"/> <!-- XXX: AMSL altitude of home location (relative alt. point)-->
+    <arg name="ardupilot_model" default="airsim-copter"/>
+	<arg name="sim_address" default="127.0.0.1"/>
+
+
+	<!-- MAVROS Port -->
+	<arg name="fcu_url" default="udp://:14551@127.0.0.1:14555" />
+	<!-- Send fake RC to allow loiter (and enable prec loiter) -->
+	<arg name="fcu_rc_override" default="true"/>
+
+    <group ns="$(arg sysname)">
+        <!-- SITL Autopilot -->
+        <node name="arducopter" pkg="simulation" type="arducopter_sitl" clear_params="true">
+            <param name="ardupilot_directory" value="$(arg ardupilot_directory)"/>
+            <param name="ardupilot_model" value="$(arg ardupilot_model)"/>
+            <param name="clear_eeprom" value="$(arg ardupilot_clear_eeprom)"/>
+            <param name="param_path" value="$(arg ardupilot_param_path)"/>
+            <param name="ardupilot_home_lat" value="$(arg ardupilot_home_lat)"/>
+            <param name="ardupilot_home_lon" value="$(arg ardupilot_home_lon)"/>
+            <param name="ardupilot_home_alt" value="$(arg ardupilot_home_alt)"/>
+            <param name="sim_address" value="$(arg sim_address)"/>
+
+			<!-- XXX: Heading is overriden by Gazebo/URDF spawning method -->
+            <!-- <param name="ardupilot_home_hdg" value="$(arg ardupilot_home_hdg)"/> -->
+        </node>
+        <node name="proxy_gcs" pkg="simulation" type="mavproxy_sitl" clear_params="true"
+		args="--label MP1 --input tcp:127.0.0.1:5762 --output udp:127.0.0.1:14550"/>
+        <node name="proxy_mavros" pkg="simulation" type="mavproxy_sitl" clear_params="true"
+		args="--label MP2 --input tcp:127.0.0.1:5763 --output udp:127.0.0.1:14551"/>
+
+    </group>
+
+    	<group ns="$(arg sysname)">
+		<!-- MAVROS System -->
+		<include file="$(find skyy_autoland)/launch/naga_mavros.launch">
+			<arg name="fcu_url" value="$(arg fcu_url)" />
+		</include>
+
+		<group if="$(eval bool(fcu_rc_override))">
+			<node pkg="rostopic" type="rostopic" name="arbitrary_name"
+			args="pub -r 10 mavros/rc/override mavros_msgs/OverrideRCIn
+			'channels: [1500, 1500, 1500, 1500, 0, 0, 0, 2000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]'"
+			/>
+		</group>
+
+	</group>
+
+</launch>

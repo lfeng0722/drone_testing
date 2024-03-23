@@ -1,0 +1,4 @@
+string type
+ScenarioPose start_pose
+ScenarioPose end_pose
+float64 speed

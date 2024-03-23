@@ -1,0 +1,103 @@
+<?xml version='1.0'?>
+<launch>
+	<!-- Set use_sim_time parameter to true -->
+    <rosparam param="use_sim_time">true</rosparam>
+	<!-- ======================== -->
+	<!--   SITL All-In-One Demo   -->
+	<!-- ======================== -->
+
+	<!-- UAV Name for Namespacing -->
+	<arg name="sysname" default="naga"/>
+	
+	<!-- Ardupilot params -->
+	<arg name="ardupilot_directory" default="/media/linfeng/HDD1/Drones/ardupilot"/>
+    <arg name="ardupilot_clear_eeprom" default="true"/>
+    <arg name="ardupilot_param_path" default="$(find skyy_autoland)/config/naga_sitl_airsim.params"/>
+    <arg name="ardupilot_home_lat" default="-33.7708463"/>
+    <arg name="ardupilot_home_lon" default="151.1155670"/>
+    <arg name="ardupilot_home_alt" default="53"/> <!-- XXX: AMSL altitude of home location (relative alt. point)-->
+    <arg name="ardupilot_model" default="airsim-copter"/>
+	<arg name="sim_address" default="127.0.0.1"/>
+
+	<!-- MAVROS Port -->
+	<arg name="fcu_url" default="udp://:14551@127.0.0.1:14555" />
+	<!-- Send fake RC to allow loiter (and enable prec loiter) -->
+	<arg name="fcu_rc_override" default="true"/>
+
+	<!-- <arg name="airsim_environment_directory" default="/home/jiaqi/Documents/auto_land/airsim_env_3"/> -->
+	<arg name="airsim_environment_directory" default="/media/linfeng/HDD1/autoland/LinuxNoEditor"/>
+
+<!--	<arg name="airsim_environment_directory" default="/media/yao/research/airsim_envs/LinuxNoEditor"/>-->
+	<arg name="airsim_environment" default="CityParkEnvironmentCollec"/>
+<!-- 	<arg name="airsim_environment" default="LandscapeMountains"/> -->
+
+	
+	<arg name="host_ip" default="127.0.0.1" />
+	<arg name="detector_model_path" default="$(find skyy_autoland)/config/best_new.pt" />
+
+	<!-- Mavros and Ardupilot -->
+
+	<include file="$(find skyy_autoland)/launch/ardupilot.launch">
+		<arg name="ardupilot_directory" value="$(arg ardupilot_directory)" />
+		<arg name="ardupilot_clear_eeprom" value="$(arg ardupilot_clear_eeprom)" />
+		<arg name="ardupilot_param_path" value="$(arg ardupilot_param_path)" />
+		<arg name="ardupilot_home_lat" value="$(arg ardupilot_home_lat)" />
+		<arg name="ardupilot_home_lon" value="$(arg ardupilot_home_lon)" />
+		<arg name="ardupilot_home_alt" value="$(arg ardupilot_home_alt)" />
+		<arg name="ardupilot_model" value="$(arg ardupilot_model)" />
+		<arg name="sim_address" value="$(arg sim_address)" />
+		<arg name="fcu_url" value="$(arg fcu_url)" />
+		<arg name="fcu_rc_override" value="$(arg fcu_rc_override)" />
+
+	</include>
+
+
+<!--	 Airsim Simulator-->
+	<include file="$(find simulation)/launch/airsim_environment_setup.launch">
+			<arg name="environment_directory" value="$(arg airsim_environment_directory)"/>
+			<arg name="environment" value="$(arg airsim_environment)"/>
+			<arg name="settings" value="$(find skyy_autoland)/config/settings_ardupilot.json" />
+			<arg name="host_ip" default="$(arg host_ip)" />
+
+	</include>
+
+<!--ego planner-->
+<include file="$(find ego_planner)/launch/run_in_airsim.launch">
+	<arg name="odom_topic" value="/naga/mavros/local_position/odom"/>
+</include>
+
+<!-- <include file="$(find ego_planner)/launch/rviz.launch"> -->
+
+<!-- </include> -->
+
+
+<!--marker detector	-->
+<node name="marker_detector" pkg="marker_detection" type="marker_detector" output="screen" launch-prefix="bash -c 'sleep 45; $0 $@' ">
+	<param name="detector_model_path" value="$(arg detector_model_path)" />
+</node>
+
+<!--detection maker	-->
+<node name="decision_maker" pkg="landing_decision" type="decision_maker_ardu.py" output="screen" launch-prefix="bash -c 'sleep 45; $0 $@' ">
+
+</node>
+
+<!-- controller	-->
+<node name="controller" pkg="control" type="controller_ardu.py" output="screen" launch-prefix="bash -c 'sleep 45; $0 $@' ">
+	<param name="host_ip" value="$(arg host_ip)" />
+
+</node>
+
+<!-- scenario sampler	-->
+<!-- <node name="rlaga" pkg="test_generation" type="rlaga.py" output="screen" launch-prefix="bash -c 'sleep 20; $0 $@' ">
+
+</node> -->
+<!-- <node name="scenario_sampler" pkg="simulation" type="scenario_sampler.py" output="screen" launch-prefix="bash -c 'sleep 20; $0 $@' ">
+
+</node> -->
+
+<!-- todo: test generator	-->
+<!-- <node name="test_generator" pkg="test_generation" type="RLaGA.py" output="screen">
+
+</node> -->
+
+</launch>

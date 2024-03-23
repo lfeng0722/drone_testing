@@ -1,0 +1,31 @@
+# Allow RC override from MAVROS
+SYSID_MYGCS 1
+# Ease up attitude control response for sensitive sensors
+ATC_RAT_PIT_D 0.0
+ATC_RAT_RLL_D 0.0
+### ===============================
+### AUTOLAND FEATURE
+### ===============================
+# Enable Precision Landing
+PLND_ENABLED    1
+# Use 'Companion Computer' mode
+PLND_TYPE       1
+# Use 'EKF' estimator
+PLND_EST_TYPE   1
+# Land descent speed (cm/s)
+LAND_SPEED 150
+# Enable precision loiter
+RC8_OPTION 39
+# Translational correction aggressiveness
+PLND_AGGR_LAND 0.25
+#LOIT_ACC_MAX 100
+#LOIT_SPEED 50
+#LOIT_ANG_MAX 10
+#PSC_POSXY_P 0.5
+### ===============================
+### SONAR FEATURE
+### ===============================
+ARMING_CHECK 0
+BATT_CAPACITY 10000
+WPNAV_SPEED 400
+circle_radius 500

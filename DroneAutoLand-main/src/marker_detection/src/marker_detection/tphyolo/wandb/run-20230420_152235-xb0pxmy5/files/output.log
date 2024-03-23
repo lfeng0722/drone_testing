@@ -1,0 +1,16 @@
+
+in train.py, line110, train_path=/home/yao/Documents/drone_testing/datasets/low_altitude_ID/images/train, val_path=/home/yao/Documents/drone_testing/datasets/low_altitude_ID/images/val, data_dict={'path': '/home/yao/Documents/drone_testing/datasets/low_altitude_ID/', 'train': '/home/yao/Documents/drone_testing/datasets/low_altitude_ID/images/train', 'val': '/home/yao/Documents/drone_testing/datasets/low_altitude_ID/images/val', 'test': '/home/yao/Documents/drone_testing/datasets/low_altitude_ID/images/test', 'nc': 4, 'names': ['marker0', 'marker1', 'marker2', 'marker3']}
+Overriding model.yaml nc=80 with nc=4
+                 from  n    params  module                                  arguments
+Traceback (most recent call last):
+  File "/home/yao/Documents/skyy/src/skyy_autoland/src/skyy_autoland/yolov5/train.py", line 636, in <module>
+    main(opt)
+  File "/home/yao/Documents/skyy/src/skyy_autoland/src/skyy_autoland/yolov5/train.py", line 532, in main
+    train(opt.hyp, opt, device, callbacks)
+  File "/home/yao/Documents/skyy/src/skyy_autoland/src/skyy_autoland/yolov5/train.py", line 123, in train
+    model = Model(cfg or ckpt['model'].yaml, ch=3, nc=nc, anchors=hyp.get('anchors')).to(device)  # create
+  File "/home/yao/Documents/skyy/src/skyy_autoland/src/skyy_autoland/yolov5/models/yolo.py", line 185, in __init__
+    self.model, self.save = parse_model(deepcopy(self.yaml), ch=[ch])  # model, savelist
+  File "/home/yao/Documents/skyy/src/skyy_autoland/src/skyy_autoland/yolov5/models/yolo.py", line 319, in parse_model
+    BottleneckCSP, C3, C3TR, C3SPP, C3Ghost, nn.ConvTranspose2d, DWConvTranspose2d, C3x}:
+NameError: name 'DWConvTranspose2d' is not defined

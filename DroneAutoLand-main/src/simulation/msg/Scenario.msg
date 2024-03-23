@@ -1,0 +1,10 @@
+std_msgs/Header header
+Marker tp_marker
+Marker[] fp_markers
+ScenarioPose drone_start_pose
+ScenarioPose gps_pose
+float64 radius
+Weather weather
+TimeOfDay time
+Actor[] actors
+int32 status

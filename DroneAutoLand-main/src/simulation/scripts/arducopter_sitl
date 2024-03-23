@@ -1,0 +1,75 @@
+#!/usr/bin/env python3
+
+from pathlib import Path
+import subprocess
+import os, io
+
+import rospy
+import rospkg
+
+# Simple ROS wrapper to run ArduCopter SITL
+if __name__ == '__main__':
+    # Make sure we're in the ROS_HOME directory to make sure stray files all end up in one place
+    home_folder = Path(os.environ.get("HOME"))
+    ros_folder_str = os.environ.get("ROS_HOME")
+    if ros_folder_str:
+        # If variable is set
+        os.chdir(Path(ros_folder_str))
+    else:
+        # Default is "~/.ros"
+        os.chdir(home_folder / ".ros")
+
+
+    # Start ROS
+    rospy.init_node('arducopter', anonymous=True)
+
+    ardupilot_model = str(rospy.get_param('~ardupilot_model', "gazebo-iris"))
+
+    ardupilot_home_lat = float(rospy.get_param('~ardupilot_home_lat', -33.7708463))
+    ardupilot_home_lon = float(rospy.get_param('~ardupilot_home_lon', 151.1155670))
+    ardupilot_home_alt = int(rospy.get_param('~ardupilot_home_alt', 53))
+    ardupilot_home_hdg = int(rospy.get_param('~ardupilot_home_hdg', 0)) #XXX: This is overriden through Gazebo/URDF model spawning 
+    sim_address = str(rospy.get_param('~sim_address', "127.0.0.1"))
+
+    # Main directory
+    ardupilot_folder = Path(rospy.get_param('~ardupilot_directory', str(home_folder / "ardupilot")))
+    rospack = rospkg.RosPack()
+    param_path = Path(rospack.get_path('skyy_autoland')) / "config" / "sitl.params"
+
+    # Clean up if needed
+    if rospy.get_param('~clear_eeprom', False):
+        rospy.logwarn('Clearing EEPROM')
+        Path('./eeprom.bin').unlink(missing_ok=True)
+
+
+    # Load in two sets of default parameters (sitl copter and gazebo specific)
+    params_folder = ardupilot_folder / "Tools/autotest/default_params"
+
+    if ardupilot_model == 'airsim-copter':
+        params = [params_folder / "copter.parm",
+                  params_folder / "airsim-quadX.parm",
+                  rospy.get_param('~param_path', param_path)]
+    else:
+        params = [params_folder / "copter.parm",
+                  params_folder / "gazebo-iris.parm"]
+
+    run_sitl = ardupilot_folder / "build/sitl/bin/arducopter"
+    mav_args = ["-I0", "--model", ardupilot_model, "--speedup", "1",
+                "--home", f"{ardupilot_home_lat:.8f},{ardupilot_home_lon:.8f},{ardupilot_home_alt},{ardupilot_home_hdg}",
+                "--uartA=tcp:5760", # Disable 'wait' on console port
+                "--uartC=tcp:5762", "--uartD=tcp:5763", # Additional comms ports (no extra configuration needed)
+                f"--sim-address={sim_address}",
+                "--defaults", ','.join(list(map(str, params)))]
+
+    if not os.path.isfile(run_sitl):
+        rospy.logerr("File not found! Check: " + str(run_sitl))
+        exit(1)
+    
+    # Open the process with all it's args, dump output and errors to the one stream
+    with subprocess.Popen([str(run_sitl)] + mav_args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT) as m:
+        try:
+            # Loop through line by line of any output
+            for line in io.TextIOWrapper(m.stdout, encoding="utf-8"):
+                rospy.loginfo('[SITL] ' + line.strip()) # Strip to get rid of trailing end of lines
+        except rospy.ROSInterruptException:
+            pass

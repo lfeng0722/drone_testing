@@ -1,0 +1,12 @@
+### ===============================
+### VEHICLE CONFIGURATION
+### ===============================
+# Use MAVLink v2
+SERIAL1_PROTOCOL	2
+SERIAL2_PROTOCOL	2
+PRX_TYPE 12
+OA_TYPE 1
+OA_BR_TYPE 2
+OA_BR_LOOKAHEAD 5
+OA_MARGIN_MAX 2
+OA_DB_OUTPUT 2

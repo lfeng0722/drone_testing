@@ -1,0 +1,9 @@
+float64 rain
+float64 road_wetness
+float64 snow
+float64 road_snow
+float64 maple_leaf
+float64 road_leaf
+float64 dust
+float64 fog
+float64 wind

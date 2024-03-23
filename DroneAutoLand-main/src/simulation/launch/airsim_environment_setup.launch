@@ -1,0 +1,38 @@
+<?xml version='1.0'?>
+<launch>
+    <rosparam param="use_sim_time">true</rosparam>
+	
+	<arg name="environment_directory" default="/media/yao/新加卷/LinuxNoEditor/"/>
+<!--	<arg name="environment_directory" default="$(env HOME)/airsim_env/"/>-->
+	<arg name="environment" default="LandscapeMountains"/>
+
+	<arg name="host_ip" default="127.0.0.1"/>
+	<arg name="settings" default="~/Documents/AirSim/settings.json" />
+
+
+	
+	<!-- AirSim Wrapper -->
+	<node name="airsim_sitl" pkg="simulation" type="airsim_sitl" clear_params="true" output="screen">
+		<param name="environment_directory" value="$(arg environment_directory)"/>
+		<param name="environment" value="$(arg environment)"/>
+		<param name="settings" value="$(arg settings)" />
+
+	</node>
+
+
+	<!-- AirSim ROS Bridge -->
+	<include file="$(find airsim_ros_pkgs)/launch/airsim_node.launch">
+		<arg name="output" default="screen"/>
+		<arg name="publish_clock" default="false"/>
+		<arg name="host_ip" default="$(arg host_ip)" />
+
+	</include>
+
+	<node name="camera_pose" pkg="simulation" type="camera_pose" clear_params="true" launch-prefix="bash -c 'sleep 45; $0 $@' ">
+
+	</node>
+
+	<node name="enu_odom" pkg="simulation" type="enu_odom.py" clear_params="true" launch-prefix="bash -c 'sleep 45; $0 $@' ">
+
+	</node>
+</launch>

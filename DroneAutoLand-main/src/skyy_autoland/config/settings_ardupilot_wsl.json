@@ -1,0 +1,60 @@
+{
+    "SettingsVersion": 1.2,
+    "SimMode": "Multirotor",
+    "OriginGeopoint": {
+      "Latitude": -35.363261,
+      "Longitude": 149.165230,
+      "Altitude": 583
+    },
+    "Vehicles": {
+      "Copter": {
+        "VehicleType": "ArduCopter",
+        "UseSerial": false,
+        "LocalHostIp": "0.0.0.0",
+        "UdpIp": "192.168.255.255",
+        "UdpPort": 9003,
+        "ControlPort": 9002,
+        "AutoCreate": true,
+        "Sensors": {
+          "Imu": {
+            "SensorType": 2,
+            "Enabled": true
+          },
+          "Gps": {
+            "SensorType": 3,
+            "Enabled": true
+          }
+        },
+        "Cameras": {
+          "downward_custom": {
+            "CaptureSettings": [
+              {
+                "PublishToRos": 1,
+                "ImageType": 0,
+                "Width": 640,
+                "Height": 480,
+                "FOV_Degrees": 90,
+                "DepthOfFieldFstop": 2.8,
+                "DepthOfFieldFocalDistance": 200.0, 
+                "DepthOfFieldFocalRegion": 200.0,
+                "TargetGamma": 1.5
+              },
+              {
+                "ImageType": 1,
+                "Width": 640,
+                "Height": 480,
+                "FOV_Degrees": 90          
+              }
+            ],
+            "X": 0, "Y": 0, "Z": 0,
+            "Pitch": -90, "Roll": 0, "Yaw": 0
+          }
+        }
+      }
+    },
+    "SubWindows": [
+      {"WindowID": 0, "ImageType": 0, "CameraName": "downward_custom", "Visible": true},
+      {"WindowID": 1, "ImageType": 1, "CameraName": "downward_custom", "Visible": true}
+  
+    ]
+  }

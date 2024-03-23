@@ -1,0 +1,110 @@
+#!/usr/bin/env python3
+
+from pathlib import Path
+import rospy
+import cv2
+import message_filters
+from sensor_msgs.msg import Image, CameraInfo
+from geometry_msgs.msg import PoseStamped, Pose
+from std_msgs.msg import Bool, String
+from cv_bridge import CvBridge
+from marker_detection.detectors.opencv_detector import OpenCVDetector
+from marker_detection.detection_processor import DetectionProcessor
+from marker_detection.msg import MarkerDetection
+
+class MarkerDetector:
+    def __init__(self, image_topic, camera_pose_topic, detection_topic, debug_topic, enable_topic, target_marker_id):
+        # Create a publisher
+        # camera_info_topic = '/airsim_node/Copter/downward_custom/Scene/camera_info'
+        sub_depth = message_filters.Subscriber(image_topic, Image)
+        sub_pose = message_filters.Subscriber(camera_pose_topic, PoseStamped)
+
+        self.marker_detector = OpenCVDetector()
+        self.detection_processer = DetectionProcessor()
+        self.bridge = CvBridge()
+
+        self.debug_pub = rospy.Publisher(debug_topic, Image, queue_size=10)
+        self.marker_detection_pub = rospy.Publisher(detection_topic, MarkerDetection, queue_size=10)
+        self.enable_sub = rospy.Subscriber(enable_topic, Bool, self.cb_enable)
+
+        self.ts = message_filters.ApproximateTimeSynchronizer([sub_depth, sub_pose], 50, 0.2)
+        self.ts.registerCallback(self.cb_image)
+
+        self.enable = False
+
+    def run(self):
+        self.enable = True
+    
+    def stop(self):
+        self.enable = False
+    
+    def cb_enable(self, msg):
+        if msg.data:
+            self.enable = True
+            rospy.loginfo("marker detector enabled")
+        else:
+            self.enable = False
+            rospy.loginfo("marker detector disabled")
+
+    def cb_image(self, image_msg, camera_pos_msg):
+        # rospy.loginfo("get image")
+        # print("get image", time.time())
+        # return
+        if self.enable:
+            # rospy.loginfo("marker detection")
+            image = self.bridge.imgmsg_to_cv2(image_msg, desired_encoding=self.marker_detector.encoding)
+            pixel_result = self.marker_detector.detect(image)
+            # rospy.loginfo(pixel_result)
+            if pixel_result.confidence != -1:
+                pose_result = self.detection_processer.process_result(pixel_result, camera_pos_msg)
+                pub_pose = Pose()
+                pub_pose.position.x = pose_result.position.x
+                pub_pose.position.y = pose_result.position.y
+                pub_pose.position.z = pose_result.position.z
+                pub_pose.orientation.w = pose_result.rotation.w
+                pub_pose.orientation.x = pose_result.rotation.x
+                pub_pose.orientation.y = pose_result.rotation.y
+                pub_pose.orientation.z = pose_result.rotation.z
+                marker_detection_msg = MarkerDetection()
+                marker_detection_msg.pose = pub_pose
+                marker_detection_msg.id = pose_result.id
+                marker_detection_msg.confidence = pose_result.confidence
+                self.marker_detection_pub.publish(marker_detection_msg)
+
+            debug_image = pixel_result.debug_image
+            debug_msg = self.bridge.cv2_to_imgmsg(debug_image, self.marker_detector.encoding)
+
+            self.debug_pub.publish(debug_msg)
+
+
+
+
+def main():
+    rospy.init_node('opencv_detector')
+    # detector_model_path = Path(rospy.get_param('~detector_model_path',
+    #  '/home/yao/Documents/DroneAutoLand/src/marker_detection/src/marker_detection/tphyolo/runs/best_new.pt'))
+    target_marker_id = rospy.get_param('~target_marker_id', 0)
+    image_topic = rospy.get_param('~image_topic', '/airsim_node/Copter/downward_custom/Scene')
+    camera_pose_topic = rospy.get_param('~camera_pose_topic', '/camera_world_pose')
+    detection_debug_topic = rospy.get_param('~detection_debug_topic', '/detection/debug')
+    enable_topic = rospy.get_param('~detection_enable_topic', '/detection/enable')
+    detection_topic = rospy.get_param('~detection_topic', '/detection/result')
+
+    detector = MarkerDetector(image_topic, camera_pose_topic, detection_topic, detection_debug_topic, enable_topic, target_marker_id=target_marker_id)
+    detector.run()
+    # rate = rospy.Rate(100)  # 1 Hz for example
+    # while not rospy.is_shutdown():
+    #     rate.sleep()
+    # Loop here until quit
+    try:
+        rospy.spin()
+    except rospy.ROSInterruptException:
+        rospy.loginfo("Shutting down autoland processor...")
+    except rospy.ROSException as e:
+        if rospy.is_shutdown():
+            pass
+        else:
+            rospy.logerr(e)
+
+if __name__ == '__main__':
+    main()

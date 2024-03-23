@@ -1,0 +1,72 @@
+<?xml version='1.0'?>
+<launch>
+	<!-- Set use_sim_time parameter to true -->
+    <rosparam param="use_sim_time">true</rosparam>
+	<!-- ======================== -->
+	<!--   SITL All-In-One Demo   -->
+	<!-- ======================== -->
+
+	<!-- UAV Name for Namespacing -->
+	<arg name="sysname" default="naga"/>
+
+	<!-- <arg name="airsim_environment_directory" default="/home/jiaqi/Documents/auto_land/airsim_env_3"/> -->
+	<arg name="airsim_environment_directory" default="/media/linfeng/HDD1/autoland/airsim_env_2"/>
+
+<!--	<arg name="airsim_environment_directory" default="/media/yao/research/airsim_envs/LinuxNoEditor"/>-->
+	<arg name="airsim_environment" default="CityParkEnvironmentCollec"/>
+	<!-- <arg name="airsim_environment" default="LandscapeMountains"/> -->
+
+	
+	<arg name="host_ip" default="127.0.0.1" />
+	<arg name="detector_model_path" default="$(find skyy_autoland)/config/best_new.pt" />
+
+<!--	<arg name="odom_topic" default="/airsim_node/Copter/odom_local_ned" />-->
+
+<!--	 Airsim Simulator-->
+	<include file="$(find simulation)/launch/airsim_environment_setup.launch">
+			<arg name="environment_directory" value="$(arg airsim_environment_directory)"/>
+			<arg name="environment" value="$(arg airsim_environment)"/>
+			<arg name="settings" value="$(find skyy_autoland)/config/settings.json" />
+
+	</include>
+
+<!--ego planner-->
+<include file="$(find ego_planner)/launch/run_in_airsim.launch">
+		<arg name="odom_topic" value="/odom_enu"/>
+</include>
+
+<include file="$(find ego_planner)/launch/rviz.launch">
+
+</include>
+
+
+<!--marker detector	-->
+<node name="marker_detector" pkg="marker_detection" type="marker_detector" output="screen" launch-prefix="bash -c 'sleep 45; $0 $@' ">
+	<param name="detector_model_path" value="$(arg detector_model_path)" />
+</node>
+
+<!--detection maker	-->
+<node name="decision_maker" pkg="landing_decision" type="decision_maker.py" output="screen" launch-prefix="bash -c 'sleep 45; $0 $@' ">
+
+</node>
+
+<!-- controller	-->
+<node name="controller" pkg="control" type="controller.py" output="screen" launch-prefix="bash -c 'sleep 45; $0 $@' ">
+	<param name="host_ip" value="$(arg host_ip)" />
+
+</node>
+
+<!-- scenario sampler	-->
+<!-- <node name="rlaga" pkg="test_generation" type="rlaga.py" output="screen" launch-prefix="bash -c 'sleep 20; $0 $@' ">
+
+</node> -->
+<!-- <node name="scenario_sampler" pkg="simulation" type="scenario_sampler.py" output="screen" launch-prefix="bash -c 'sleep 20; $0 $@' ">
+
+</node> -->
+
+<!-- todo: test generator	-->
+<!-- <node name="test_generator" pkg="test_generation" type="RLaGA.py" output="screen">
+
+</node> -->
+
+</launch>
