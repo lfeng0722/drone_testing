@@ -342,23 +342,7 @@ Then you can comment out the following line (ln. ~364) to mute it in `/usr/lib/x
 pcl_message("** WARNING ** ${_component} features related to ${_lib} will be disabled")
 ```
 
-## PX4 SITL
 
-Toolchain setup (adapted from [official source](https://docs.px4.io/main/en/dev_setup/dev_env_linux_ubuntu.html)):
-
-```bash
-cd ~
-git clone https://github.com/PX4/PX4-Autopilot.git px4 --recursive --branch v1.11.3 --depth 1
-
-cd ~/px4
-bash ./Tools/setup/ubuntu.sh
-
-# The following is done automatically on the clone command above
-# git checkout v1.11.3 # or latest stable release 
-# git submodule update --init --recursive
-
-make px4_sitl_default
-```
 
 ## Mapping
 
