@@ -275,77 +275,7 @@ Complete ArduCopter `~/Document/AirSim/settings.json`:
 }
 ```
 
-Complete PX4 `~/Document/AirSim/settings.json`:
 
-```bash
-{
-  "SettingsVersion": 1.2,
-  "SimMode": "Multirotor",
-  "ClockType": "SteppableClock",
-  "Vehicles": {
-    "copter": {
-      "VehicleType": "PX4Multirotor",
-      "UseSerial": false,
-      "LockStep": true,
-      "UseTcp": true,
-      "TcpPort": 4560,
-      "ControlPortLocal": 14541,
-      "ControlPortRemote": 14580,
-      "Sensors": {
-        "Barometer": {
-          "SensorType": 1,
-          "Enabled": true,
-          "PressureFactorSigma": 0.0001825
-        },
-        "lidar": {
-          "SensorType": 6,
-          "Enabled": true,
-          "NumberOfChannels": 1,
-          "PointsPerSecond": 5000,
-          "DrawDebugPoints": false,
-          "RotationsPerSecond": 10,
-          "VerticalFOVUpper": 0,
-          "VerticalFOVLower": 0,
-          "HorizontalFOVStart": 0,
-          "HorizontalFOVEnd": 359,
-          "DataFrame": "SensorLocalFrame",
-          "ExternalController": true
-        }
-      },
-      "Parameters": {
-        "NAV_RCL_ACT": 0,
-        "NAV_DLL_ACT": 0,
-        "COM_OBL_ACT": 1,
-        "LPE_LAT": 47.641468,
-        "LPE_LON": -122.140165
-      },
-      "Cameras": {
-        "downward_custom": {
-          "CaptureSettings": [
-            {
-              "PublishToRos": 1,
-              "ImageType": 0,
-              "Width": 640,
-              "Height": 480,
-              "FOV_Degrees": 27,
-              "DepthOfFieldFstop": 2.8,
-              "DepthOfFieldFocalDistance": 200.0,
-              "DepthOfFieldFocalRegion": 200.0,
-              "TargetGamma": 1.5
-            }
-          ],
-          "X": 0,
-          "Y": 0,
-          "Z": 0,
-          "Pitch": -90,
-          "Roll": 0,
-          "Yaw": 0
-        }
-      }
-    }
-  }
-}
-```
 
 Option 1: Run project editor:
 
