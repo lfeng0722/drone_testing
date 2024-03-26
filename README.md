@@ -31,6 +31,13 @@ Download AirSim binaries from the [link](https://drive.google.com/drive/folders/
 2. Open a terminal in the unzipped folder
 3. run the command ‘pip install -e .’ to install AirSim library in Python
 
+
+## Simulation map
+1. [Download our packaged simulation map 
+](https://drive.google.com/file/d/1Z8ika2kn8KrnMIwiAt2WGTQ13_62vpeZ/view?usp=sharing)
+2. unzip it
+
+
 ## Install Landing System and Testing Method
 
 1. Clone the this repo.
@@ -94,3 +101,4 @@ rosrun test_generation rlaga_gen.py
 ### Evaluation
 1. Modify the result folder address `exp_folder` in `Evaluation.py`
 2. Run the `Evaluation.py`
+
