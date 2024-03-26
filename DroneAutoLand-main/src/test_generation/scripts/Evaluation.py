@@ -20,9 +20,7 @@ x = np.arange(0, bound_x[1] - bound_x[0], step_size)
 y = np.arange(0, bound_y[1] - bound_y[0], step_size)
 z = np.arange(0, bound_z[1] - bound_z[0], step_size)
 
-# Create meshgrid for 3D coordinates
-# X, Y, Z = np.meshgrid(x, y, z)
-# occupied = np.zeros(X.shape, dtype=bool)
+
 grid = np.zeros((150, 150, 100))
 # threshold_distance = step_size / 2.0
 def distance_2d(point1, point2):
@@ -86,18 +84,6 @@ def plot_traj(coordinates, grid):
 
 
 
-    # dist = np.sqrt((X - coord[0])**2 + (Y - coord[1])**2 + (Z - coord[2])**2)
-    # occupied = np.logical_or(occupied, dist <= threshold_distance)
-
-    # Extract X, Y, and Z coordinates
-    # x_coords = [point[0] - bound_x[0] for point in coordinates]
-    # y_coords = [point[1] - bound_y[0] for point in coordinates]
-    # z_coords = [point[2] - bound_z[0] for point in coordinates]
-
-    # Create a new figure
-
-
-    # plt.show()
 
 
 exp_folder = '/media/linfeng/HDD1/NEW_ICSE/rlaga_tph_court_01'
@@ -175,29 +161,8 @@ for record in records:
                 img = Image.fromarray(item)
                 # img.save(f'/media/linfeng/HDD1/img/collision{num_record}_{num_photo}.jpeg')
             found_collision_type=1
-            if_vio=1
-        # if record_result['land_result']['collision']==1 and last_avil_point[2]>-2:
-        #     type2_count+=1
-        #     violation+=1
-        #     found_type_2=1
-        #     num_photo = 0
-        #     for item in photo:
-        #         num_photo+=1
-        #         img = Image.fromarray(item)
-        #         img.save(f'/media/linfeng/HDD1/img/noavo{num_record}_{num_photo}.jpeg')
-        # if last_avil_point[2]<-8:
-        #     type3_count+=1
-        #     violation+=1
-        #     found_type3=1
-        #     num_photo = 0
-        #     for item in photo:
-        #         num_photo+=1
-        #         img = Image.fromarray(item)
-        #         img.save(f'/media/linfeng/HDD1/img/nolanding{num_record}_{num_photo}.jpeg')
+
         if record_result['land_result']['land_deviation'] >1.5 and record_result['land_result']['collision']==0:
-        # if devi > 5 and last_avil_point[2] > -2 and record_result['land_result']['collision'] == 0:
-            # print('tp_marker', marker_coord)
-            # print('drone last point', last_avil_point)
             wrong_land_type+=1
             violation+=1
             found_wrong_land_type = 1
@@ -231,80 +196,6 @@ print('violation: ',violation)
 print('violation_Rate: ',violation/num_record)
 print('parameter distance: ', compute_total_distance(weather_array)/len(weather_array))
 
-# result_df = pd.DataFrame(result_df)
+
 cover = plot_traj(traj_cover_arr, grid)
 print('coverage: ', cover/num_record)
-# for record in records:
-#     # print(record)
-#     # print(record_result['trajectory'])
-#     # break
-#     with open(os.path.join(exp_folder, record), 'rb') as f:
-#
-#         record_result = pickle.load(f)
-#         # if record_result['land_result']['land_success'] == 0:
-#         #     print(record)
-#         #     print(record_result['scenario'])
-#             # break
-#         result_df['round'].append(record.split('.')[0])
-#         for k in record_result['land_result'].keys():
-#             result_df[k].append(record_result['land_result'][k])
-#         traj_cover_arr += record_result['trajectory']
-#         result_df['end_point_z'].append(record_result['trajectory'][-1][2])
-        # print(record_result.keys())
-        # print(record_result['land_result'])
-    # break
-#
-
-# print('number of violation: ', result_df[(result_df['land_deviation']>2) & result_df['end_point_z']>2].shape[0]+result_df[(result_df['land_deviation']<1.5) & (result_df['collision']==1)].shape[0])
-# print('number of simulation: ',  result_df.shape[0])
-# print('number of wrong landing: ', maker_wrong_detect)
-# print('number of collision: ', result_df[result_df['collision']==1].shape[0])
-# print('number of collision-try to aviod not success: ', result_df[(result_df['collision']==1)&(result_df['end_point_z']<-2)].shape[0])
-# print('number of collision-no avoid: ', result_df[(result_df['collision']==1)&(result_df['end_point_z']>-2)].shape[0])
-# # print('number of unland-mark not detected: ', result_df[(result_df['land_success']==0) & (result_df['land_deviation']>4)].shape[0])
-# # print(result_df['end_point_z'])
-# print('number of unland-mark not detected: ', result_df[(result_df['end_point_z'] < -8)].shape[0])
-# print('number of unland-mark wrong detected: ', result_df[(result_df['land_deviation'] > 3) & (result_df['end_point_z'] > -3) & (result_df['collision']==0)].shape[0])
-# # print('percentage of violation: ', violation/result_df.shape[0])
-    # print(result_df[(result_df['land_deviation'] > 3) & (result_df['end_point_z'] > -2)])
-    # print(result_df[(result_df['end_point_z'] < -5) & (result_df['land_deviation'] > 3)])
-    # print('number of collision: ', result_df[result_df['collision'] == 1].shape[0])
-    # print('number of collision-unland: ', result_df[(result_df['collision']==1)& (result_df['land_success']==0)& (result_df['land_deviation']<3)].shape[0])
-    # print('number of collision-land: ', result_df[(result_df['collision']==1)& (result_df['land_success']==1)& (result_df['land_deviation']<2)].shape[0])
-    # print(result_df[(result_df['land_deviation'] <= 1.5)].shape[0])
-    # print(result_df[(result_df['land_deviation'] <= 1.5) & (result_df['end_point_z'] < -2)].shape[0])
-    # print('number of inaccurately land: ', result_df[(result_df['land_deviation'] > 1.5) & (result_df['land_deviation'] <= 3) & (result_df['end_point_z'] < -2)].shape[0])
-    # print('number of wrong land: ', result_df[(result_df['land_deviation'] > 3) & (result_df['end_point_z'] < -2)].shape[0])
-
-    # # print('number of unland-mark hide by objects or weather: ', result_df[(result_df['land_success']==0) & (result_df['land_deviation']<3)].shape[0])
-
-    # # print('number of inaccurate landing: ', result_df[(result_df['land_deviation']>1.5) & (result_df['land_deviation']<3) & (result_df['land_success']==1)].shape[0])
-    # # print('number of false landing: ', result_df[(result_df['land_deviation']>3) & (result_df['land_success']==1)].shape[0])
-    # array.append(result_df[(result_df['land_success']==0) & (result_df['land_deviation']>4)].shape[0])
-    # array.append(result_df[(result_df['land_success']==0) & (result_df['land_deviation']<3)].shape[0])
-    # array.append(result_df[(result_df['collision']==1)& (result_df['land_success']==0)& (result_df['land_deviation']<3)].shape[0])
-    # array.append(result_df[(result_df['collision']==1)& (result_df['land_success']==1)& (result_df['land_deviation']<2)].shape[0])
-
-# big_categories = ['Ground', 'Lawn']
-# values = [ground,lawn]
-#
-# N=4
-# width = 0.15  #
-# group_width = N * width  # 一个大类的总宽度
-# ind = np.arange(N) * group_width  # x轴的位置
-# fig, ax = plt.subplots()
-#
-# bars = []
-# for i, val in enumerate(values):
-#     positions = ind + i * width  # 每个大类的x轴位置
-#     bar = ax.bar(positions, val, width)
-#     bars.append(bar)
-# ax.axhline(0, color='grey', linewidth=0.8)
-# ax.set_ylabel('number of cases')
-# # ax.set_title('每个大类里面的小类的值')
-# ax.set_xticks(ind + 1.5 * width)
-# ax.set_xticklabels(('type1', 'type2', 'type3', 'type4'))
-# ax.legend([b[0] for b in bars], big_categories)
-#
-# # 显示图
-# plt.show()
