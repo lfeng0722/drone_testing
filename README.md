@@ -63,11 +63,11 @@ catkin_make
 
 1. Set up ardupilot: in `src/skyy_autoland/launch/autoland_ardupilot.launch`, modify `ardupilot_directory` to your ardupilot path and `sim_address` to 127.0.0.1 if you run Autoland in Ubuntu. Modify `airsim_environment_directory` to the address of simulation folder.  
 2. Set up the map in `src/simulation/scripts/airsim_sitl`, modify `~PlayerStartTag`, and enter the name of map `court` or `lawn`.
-3. Set all script files in all modules as executable. For example, set `rlaga_gen.py` in `src/test_generation/scripts` using the following commands:
+3. Set all script files in all modules as executable. For example, set `run.py` in `src/test_generation/scripts` using the following commands:
     
     ```bash
     cd src/test_generation/scripts
-    chmod +x ga_gen.py
+    chmod +x run.py
     ```
     
 
@@ -82,10 +82,15 @@ catkin_make
 2. After 3 `connected` pop up, start test case generation
 
 ###  Test case generation
-1. Open a terminal, run following commands:
+1. Set up the folder to save the record in the `run.py`.
+2. Set up the map
+3Open a terminal, run following commands:
 
 ```bash
 source devel/setup.bash
 rosrun test_generation rlaga_gen.py
 ```
 
+### Evaluation
+1. Modify the result folder address `exp_folder` in `Evaluation.py`
+2. Run the `Evaluation.py`
