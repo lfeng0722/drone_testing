@@ -57,7 +57,7 @@ source ../marker_landing_system/devel/setup.bash
 catkin_make
 ```
 
-## Run Autoland with AirSim standalone environment
+## Run the auto-landing system and our test method
 
 ### Configuration
 
