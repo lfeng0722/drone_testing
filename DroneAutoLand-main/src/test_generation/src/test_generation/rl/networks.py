@@ -48,7 +48,7 @@ class DQNAgent:
         return self.action_space[torch.argmax(q_values).item()]
 
     def evaluate(self, state):
-        self.q_network.load_state_dict(torch.load('/home/linfeng/Documents/agent_q_network_weights.pth'))
+        self.q_network.load_state_dict(torch.load('agent_q_network_weights.pth'))
         q_values = self.q_network(torch.FloatTensor(state).cuda()).cuda()
         return self.action_space[torch.argmax(q_values).item()]
 
