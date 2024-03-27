@@ -56,11 +56,11 @@ source /opt/ros/noetic/setup.bash
 catkin_make
 ```
 
-1. Open the file skyy_autoland_ws/landing_simulation_system/landing_simulation_system/src/airsim_ros/src/airsim_ros_pkgs/CMakeLists.txt in a text editor, modify line 5 to set AIRSIM_ROOT as your AriSim path  
-2. Open another terminal and enter the folder skyy_autoland_ws/landing_simulation_system, run following commands
+1. Open the file `src/airsim_ros/src/airsim_ros_pkgs/CMakeLists.txt` in a text editor, modify line 5 to set AIRSIM_ROOT as your AriSim path  
+2. Open another terminal in `DroneAutoLand-main` folder, run following commands
 
 ```bash
-source ../marker_landing_system/devel/setup.bash
+source devel/setup.bash
 catkin_make
 ```
 
