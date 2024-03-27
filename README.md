@@ -17,19 +17,7 @@ Follow the [instruction](https://microsoft.github.io/AirSim/build_linux/) to bui
 - ROS-noetic
 - MAVROS
 - RVIZ
-- Other missing ROS packages when compiling Autoland (to update)
 
-### AirSim environment binaries
-
-Download AirSim binaries from the [link](https://drive.google.com/drive/folders/1BGHT6QWqC53SEXPojBrTYvwlCBGn3Hv9) and unzip it.
-
-### AirSim Python SDK
-
-[airsim_python_sdk.zip](Autoland%20Documentation%20d09d6717e6b1461fa465d472eade4856/airsim_python_sdk.zip)
-
-1. Download the file and unzip it.
-2. Open a terminal in the unzipped folder
-3. run the command ‘pip install -e .’ to install AirSim library in Python
 
 
 ## Simulation map
@@ -41,6 +29,8 @@ Download AirSim binaries from the [link](https://drive.google.com/drive/folders/
 ## Install Landing System and Testing Method
 
 1. Clone the repo.
+2. Enter `PythonClient` folder
+3. Open a terminal in, run the command `pip install -e .` to install AirSim library in Python
 
 
 Before compilation,  you must remove a conflicting ROS package:
