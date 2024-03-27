@@ -14,9 +14,15 @@ Follow the [instruction](https://microsoft.github.io/AirSim/build_linux/) to bui
 
 ### ROS packages
 
-- ROS-noetic
-- MAVROS
-- RVIZ
+- ROS-noetic-full-desktop
+- mavros
+- mavros_msgs
+- tf2_sensor_msgs
+- After installing mavros, run sudo /opt/ros/noetic/lib/mavros/install_geographiclib_datasets.sh
+- pytorch
+- tqdm
+- seaborn
+- einops
 
 
 
@@ -39,7 +45,7 @@ Before compilation,  you must remove a conflicting ROS package:
 sudo apt-get remove ros-noetic-multi-map-server
 ```
 
-1. Open a terminal and enter the folder skyy_autoland_ws/marker_landing_system, run following commands
+1. Open a terminal and enter the `DroneAutoLand` folder, run following commands
 
 ```bash
 source /opt/ros/noetic/setup.bash
@@ -50,7 +56,6 @@ catkin_make
 2. Open another terminal in `DroneAutoLand-main` folder, run following commands
 
 ```bash
-source devel/setup.bash
 catkin_make
 ```
 
@@ -85,7 +90,7 @@ catkin_make
 
 ```bash
 source devel/setup.bash
-rosrun test_generation rlaga_gen.py
+rosrun test_generation run.py
 ```
 
 ### Evaluation
