@@ -45,7 +45,7 @@ Before compilation,  you must remove a conflicting ROS package:
 sudo apt-get remove ros-noetic-multi-map-server
 ```
 
-1. Open a terminal and enter the `DroneAutoLand` folder, run following commands
+1. Open a terminal and enter the `DroneAutoLand-main` folder, run following commands
 
 ```bash
 source /opt/ros/noetic/setup.bash
