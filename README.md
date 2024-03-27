@@ -91,7 +91,7 @@ catkin_make
 ###  Test case generation
 1. Set up the folder to save the record in the `run.py`.
 2. Set up the map
-3Open a terminal, run following commands:
+3. Open a terminal, run following commands:
 
 ```bash
 source devel/setup.bash
