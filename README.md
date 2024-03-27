@@ -35,12 +35,12 @@ Download AirSim binaries from the [link](https://drive.google.com/drive/folders/
 ## Simulation map
 1. [Download our packaged simulation map 
 ](https://drive.google.com/file/d/1Z8ika2kn8KrnMIwiAt2WGTQ13_62vpeZ/view?usp=sharing)
-2. unzip it
+2. Unzip it
 
 
 ## Install Landing System and Testing Method
 
-1. Clone the this repo.
+1. Clone the repo.
 
 
 Before compilation,  you must remove a conflicting ROS package:
@@ -68,7 +68,7 @@ catkin_make
 
 ### Configuration
 
-1. Set up ardupilot: in `src/skyy_autoland/launch/autoland_ardupilot.launch`, modify `ardupilot_directory` to your ardupilot path and `sim_address` to 127.0.0.1 if you run Autoland in Ubuntu. Modify `airsim_environment_directory` to the address of simulation folder.  
+1. Set up ardupilot: in `src/skyy_autoland/launch/autoland_ardupilot.launch`, modify `ardupilot_directory` to your ardupilot path, modify `airsim_environment_directory` to the simulation map's address.  
 2. Set up the map in `src/simulation/scripts/airsim_sitl`, modify `~PlayerStartTag`, and enter the name of map `court` or `lawn`.
 3. Set all script files in all modules as executable. For example, set `run.py` in `src/test_generation/scripts` using the following commands:
     
