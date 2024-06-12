@@ -10,19 +10,17 @@ from airsim_simulation.scenario import Scenario
 from scipy.spatial import distance
 from PIL import Image
 import math
-
-bound_x = [-20, 20]
-bound_y = [-20, 20]
-bound_z = [-15, 0]
-step_size = 0.5
-# Create 3D grid
-x = np.arange(0, bound_x[1] - bound_x[0], step_size)
-y = np.arange(0, bound_y[1] - bound_y[0], step_size)
-z = np.arange(0, bound_z[1] - bound_z[0], step_size)
+from airsim_simulation.configuration import map_config
 
 
-grid = np.zeros((150, 150, 100))
-# threshold_distance = step_size / 2.0
+map_name = 'lawn'
+bound_x = map_config[map_name]['random_pos_x']
+bound_y = map_config[map_name]['random_pos_y']
+bound_z = [-30, 0]
+grid_size = 2
+
+grid = np.zeros(((bound_x[1]-bound_x[0])//2, (bound_y[1]-bound_y[0])//2, 15))
+
 def distance_2d(point1, point2):
     """Calculate the Euclidean distance between two points in 2D space."""
     return math.sqrt((point2[0] - point1[0])**2 + (point2[1] - point1[1])**2)
@@ -69,24 +67,20 @@ def compute_total_distance(arrays):
 
 def plot_traj(coordinates, grid):
     for coord in coordinates:
+
         coord[0] -= bound_x[0]
         coord[1] -= bound_y[0]
         coord[2] -= bound_z[0]
-        # print([int(coord[0]/0.5), int(coord[1]/0.5), int(coord[2]/0.5)] )
-        # print(coord[0])
-        # print(coord[1])
-        # print(coord[2])
-        if abs(int(coord[0]/0.5)) <150 and abs(int(coord[1]/0.5))<150 and abs(int(coord[2]/0.5))<150:
-            grid[int(coord[0]/0.5), int(coord[1]/0.5), int(coord[2]/0.5)] = 1
+
+        if abs(int(coord[0]/2)) <(bound_x[1]-bound_x[0])//2 and abs(int(coord[1]/2))<(bound_y[1]-bound_y[0])//2 and abs(int(coord[2]/2))<15:
+            grid[int(coord[0]/2), int(coord[1]/2), int(coord[2]/2)] = 1
 
     occupied_cells = np.argwhere(grid == 1)
     return len(occupied_cells)
 
 
 
-
-
-exp_folder = '/media/linfeng/HDD1/NEW_ICSE/rlaga_tph_court_01'
+exp_folder = '/media/linfeng/HDD1/NEW_ICSE/GA_MM_Lawn_01'
 
 
 
@@ -125,20 +119,20 @@ for record in records:
         result_df['round'].append(record.split('.')[0])
         photo = record_result['scenes']
 
-        # print(record_result['land_result'].keys())
+     
         for k in record_result['land_result'].keys():
             # print(k)
 
             result_df[k].append(record_result['land_result'][k])
 
-        # print(record_result['marker'])
+        
         destination = [record_result['scenario']['gps_pose']['pos_x'],record_result['scenario']['gps_pose']['pos_y']]
-        # print('distination', destination)
+        
         marker = record_result['scenario']['tp_marker']
         marker_coord = [record_result['scenario']['tp_marker']['pos_x'],record_result['scenario']['tp_marker']['pos_y']]
-        # print('tp_marker', marker_coord)
+        
         marker_destination = distance_2d(destination,marker_coord)
-        # print('distance', marker_destination )
+        
         for item in reversed(record_result['trajectory']):
             if distance_3d(item,(0,0,0))>5:
                 # print(item)
@@ -150,7 +144,7 @@ for record in records:
             weather_array.append(modified_weather_vec)
 
         devi = distance_2d(last_avil_point[0:2],marker_coord)
-        # if record_result['land_result']['collision']==1 and last_avil_point[2]<-2:
+        
         if record_result['land_result']['collision'] == 1:
             # print(record_result['land_result']['collision'])
             collision_type+=1
@@ -159,18 +153,18 @@ for record in records:
             for item in photo:
                 num_photo+=1
                 img = Image.fromarray(item)
-                # img.save(f'/media/linfeng/HDD1/img/collision{num_record}_{num_photo}.jpeg')
+                img.save(f'/media/linfeng/HDD1/img/collision{num_record}_{num_photo}.jpeg')
             found_collision_type=1
-
+            if_vio=1
+ 
         if record_result['land_result']['land_deviation'] >1.5 and record_result['land_result']['collision']==0:
-            wrong_land_type+=1
             violation+=1
             found_wrong_land_type = 1
             num_photo = 0
             for item in photo:
                 num_photo+=1
                 img = Image.fromarray(item)
-                # img.save(f'/media/linfeng/HDD1/img/landwrong{num_record}_{num_photo}.jpeg')
+                img.save(f'/media/linfeng/HDD1/img/landwrong{num_record}_{num_photo}.jpeg')
 
             if_vio=1
         if if_vio:
@@ -196,6 +190,6 @@ print('violation: ',violation)
 print('violation_Rate: ',violation/num_record)
 print('parameter distance: ', compute_total_distance(weather_array)/len(weather_array))
 
-
 cover = plot_traj(traj_cover_arr, grid)
-print('coverage: ', cover/num_record)
+print('coverage: ', cover/((bound_x[1]-bound_x[0])//2* (bound_y[1]-bound_y[0])//2* 15))
+
